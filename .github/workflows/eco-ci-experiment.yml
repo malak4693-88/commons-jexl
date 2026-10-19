@@ -1,0 +1,46 @@
+
+name: JEXL Energy Experiment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  energy-measurement:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: start-measurement
+          send-data: 'false'
+
+      - name: Run Maven Tests
+        run: mvn --batch-mode --no-transfer-progress test
+
+      - name: Get Energy Measurement
+        if: always()
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: JEXL Tests
+
+      - name: Display Results
+        if: always()
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
