@@ -143,7 +143,7 @@ class ArrayTypeTest {
     // intersect x, c, b, a -> class0
     result = script.execute(null, x, c, b, a);
     assertTrue(result.getClass().isArray()
-        & result.getClass().getComponentType().equals(Class0.class));
+        && result.getClass().getComponentType().equals(Class0.class));
 
     // intersect a, b, c, d -> inter0
     final Object d = new ClassD();
